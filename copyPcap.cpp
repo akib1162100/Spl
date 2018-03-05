@@ -99,8 +99,8 @@ int main()
     ether eT;
 
     FILE *iFile,*oFile;
-    iFile=fopen("bal.pcap","rb");
-    oFile=fopen("sal.pcap","wb");
+    iFile=fopen("a.pcap","rb");
+    oFile=fopen("b.pcap","wb");
     fread(&gH,sizeof( globalHeader),1,iFile);
     fwrite(&gH,sizeof(globalHeader),1,oFile);
 
