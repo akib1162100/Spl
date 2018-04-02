@@ -480,7 +480,7 @@ void printFileByEtlayer(FILE *iFile,FILE *oFile,FILE *arpFile,FILE *ip4File,FILE
         string s=checkLinLayer(etx,ety);
 
 
-
+        total++;
         if(s=="IPV4")
         {
             cout<<endl;
@@ -630,14 +630,7 @@ void printFileByEtlayer(FILE *iFile,FILE *oFile,FILE *arpFile,FILE *ip4File,FILE
    }
 
  }
-
-
-
-
-
-
-
-
+    
 }
 
 
