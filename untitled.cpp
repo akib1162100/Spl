@@ -18,47 +18,42 @@ using namespace std;
 #define htons(n) (((((unsigned short)(n) & 0xFF)) << 8) | (((unsigned short)(n) & 0xFF00) >> 8))
 #endif ///converting host byte order..
 
-
-FILE *iFile;
+//FILE *iFile;
 int sock_r;
 struct sockaddr_in source,dest;
 
-
-void addPHInFile(int data_size)
-{
+void addPacketHeaderInFile(int data_size , FILE *packetCapture){
     
-    long long int epochTime = 0;
-    long long int captureTime = 0;
-    long long int packetSize = data_size;
-    long long int packetLength = data_size;
+    unsigned long int epochTime = 1520144305;
+    unsigned long int captureTime = 479050000;
+    unsigned long int packetSize = data_size;
+    unsigned long int packetLength = data_size;    
     
-    
-    fwrite(&epochTime,4,1,iFile);
-    fwrite(&captureTime,4,1,iFile);
-    fwrite(&packetSize,4,1,iFile);
-    fwrite(&packetLength,4,1,iFile);
+    fwrite(&epochTime,4,1,packetCapture);
+    fwrite(&captureTime,4,1,packetCapture);
+    fwrite(&packetSize,4,1,packetCapture);
+    fwrite(&packetLength,4,1,packetCapture);
 }
 
 
-void addGHInFile()
-{
+void addPcapGlobalHeaderInFile(FILE *packetCapture){
    
-    long long int magicNumber = 2712847316; 
-    long long int majorVersion = 2;
-    long long int minorVersion = 4;
-    long long int timeZone = 0;
-    long long int lengthOfCapturePackets = 65535;
-    long long int linkLayerHedrType = 1;
-    
-    
-    fwrite(&magicNumber,4,1,iFile);
-    fwrite(&majorVersion,2,1,iFile);
-    fwrite(&minorVersion,2,1,iFile);
-    fwrite(&timeZone,8,1,iFile);
-    fwrite(&lengthOfCapturePackets,4,1,iFile);
-    fwrite(&linkLayerHedrType,4,1,iFile);
-       
-    
+    unsigned long int magicNumber = 2712847316; 
+    unsigned short int majorVersion = 2;
+    unsigned short int minorVersion = 4;
+    unsigned long int timeZone = 0;
+    unsigned long int sigfigs = 0;
+    unsigned long int lengthOfCapturePackets = 65535;
+    unsigned long int linkLayerHedrType = 1;
+        
+    fwrite(&magicNumber,4,1,packetCapture);
+    fwrite(&majorVersion,2,1,packetCapture);
+    fwrite(&minorVersion,2,1,packetCapture);
+    fwrite(&timezone,4,1,packetCapture);
+    fwrite(&sigfigs,4,1,packetCapture);
+    fwrite(&lengthOfCapturePackets,4,1,packetCapture);
+    fwrite(&linkLayerHedrType,4,1,packetCapture);
+        
 }
 
 
@@ -68,7 +63,6 @@ void addGHInFile()
 
 int main()
 {
-
 	
 	sock_r=socket(AF_PACKET,SOCK_RAW,htons(ETH_P_ALL));
 	if(sock_r<0)
@@ -76,45 +70,31 @@ int main()
 	printf("error in socket\n");
 	return -1;
 	}
+	FILE *iFile;
 
 	iFile=fopen("a.pcap","wb");
-	addGHInFile();
+	addPcapGlobalHeaderInFile(iFile);
+	unsigned char bufferArray[10000];
 
-
-	unsigned char *buffer = (unsigned char *) malloc(65536);
-	memset(buffer,0,65536);
+	//unsigned char *buffer = (unsigned char *) malloc(65536);
+	//memset(buffer,0,65536);
 	struct sockaddr saddr;
 	int saddr_len = sizeof (saddr);
 	int buflen;
 	 
 	 for(int i=0;i<100;i++)
 	 {
-
-
-
-
-
 	
-	buflen=recvfrom(sock_r,buffer,65536,0,&saddr,(socklen_t *)&saddr_len);
-	if(buflen<0)
-	{
-	printf("error in reading recvfrom function\n");
-	return -1;
-	}
+		buflen=recvfrom(sock_r,bufferArray,65536,0,&saddr,(socklen_t *)&saddr_len);
+		if(buflen<0)
+		{
+		printf("error in reading recvfrom function\n");
+		return -1;
+	 	}
+	
+	addPacketHeaderInFile(buflen,iFile);
 
-	addPHInFile(buflen);
-
-	fwrite(&buffer,sizeof(unsigned char )*buflen,1,iFile);
-
-
-
-
-
-
-
-
-
-
+	fwrite(&bufferArray,sizeof(unsigned char )*buflen,1,iFile);
 
 
 
