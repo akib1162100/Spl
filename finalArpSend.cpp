@@ -1,22 +1,20 @@
-
+#include <bits/stdc++.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/ip.h>
-#include <sys/ioctl.h>
-#include <bits/ioctls.h>
-#include <net/if.h>
 #include <linux/if_ether.h>
 #include <linux/if_packet.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <bits/ioctls.h>
 #include <net/ethernet.h>
+#include <netinet/ip.h>
 #include <errno.h>
-#include <bits/stdc++.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 using namespace std;
-
 
 typedef struct _arp_hdr arp_hdr;
 struct _arp_hdr {
