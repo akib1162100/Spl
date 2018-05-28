@@ -123,7 +123,6 @@ string checkLinLayer(int et_1,int et_2)
     {
        arp++;
         return "ARP";
-
     }
     else if(et_1==(int)134 && et_2==(int)221)
     {
@@ -134,11 +133,9 @@ string checkLinLayer(int et_1,int et_2)
     {
         ot++;
         return "Others";
-
     }
-
-
 }
+
 int tcp=0;
 int udp=0;
 int icmp=0;
@@ -191,7 +188,7 @@ string checkTransLayer(int proto)
             {
                 printf("%06X  ", i);
             }
-            else 
+            else
             {
                 if (i%16 == 0)
                       printf("\n%06X  ", i);
@@ -238,7 +235,7 @@ void printFileByTransProtocol(FILE *iFile,FILE *otFile,FILE *tcpFile,FILE *udpFi
 
         fread(&pH,sizeof( packetHeader),1,iFile);
         int x=packetSizeCal(pH);        //calculating size
-        
+
         unsigned char ch[x],c;
 
 
@@ -254,68 +251,34 @@ void printFileByTransProtocol(FILE *iFile,FILE *otFile,FILE *tcpFile,FILE *udpFi
 
         if(s=="TCP")
         {
-            cout<<endl;
-            cout<<endl;
-            cout<<endl;
-            cout<<total<<endl;
-            cout<<endl;
-            cout<<"Transport protocol "<< s <<" NO:"<<tcp<<endl;
-            cout<<endl;
-
-
-           // fwrite(&pH,sizeof(packetHeader),1,tcpFile);
-
+            printf("\n\n%d\nTransTCP No:%d\n",total,tcp);
             printPcap(pH,tcpFile,ch,x);
+        }
 
-    }
-
-    else if(s=="UDP")
+        else if(s=="UDP")
         {
-            cout<<endl;
-            cout<<endl;
-            cout<<total<<endl;
-            cout<<endl;
-            cout<<"Transport protocol "<< s <<" NO:"<<udp<<endl;
-            cout<<endl;
-
+            printf("\n\n%d\nTransUDP No:%d\n",total,udp);
             printPcap(pH,udpFile,ch,x);
         }
 
-     else if(s=="ICMP")
+        else if(s=="ICMP")
         {
-            cout<<endl;
-            cout<<endl;
-            cout<<total<<endl;
-            cout<<endl;
-            cout<<"Transport protocol "<< s <<" NO:"<<icmp<<endl;
-            cout<<endl;
+            printf("\n\n%d\nTransICMP No:%d\n",total,icmp);
             printPcap(pH,icmpFile,ch,x);
-
         }
 
-     else if(s=="IGMP")
+        else if(s=="IGMP")
         {
-            cout<<endl;
-            cout<<endl;
-            cout<<total<<endl;printPcap(pH,udpFile,ch,x);
-            cout<<endl;
-            cout<<"Transport protocol "<< s <<" NO:"<<igmp<<endl;
-            cout<<endl;
-
+            printf("\n\n%d\nTransIGMP No:%d\n",total,igmp);
             printPcap(pH,igmpFile,ch,x);
-           }
+        }
 
-     else if(s=="Other")
-           {
-                cout<<endl;
-                cout<<endl;
-                cout<<total<<endl;
-                cout<<endl;
-                cout<<"Transport protocol "<< s <<" NO:"<<ott<<endl;
-                cout<<endl;
-                printPcap(pH,otFile,ch,x);
+        else if(s=="Other")
+        {
+            printf("\n\n%d\nTransOther No:%d\n",total,ott);
+            printPcap(pH,otFile,ch,x);
 
-            }
+        }
    }
 
 }
@@ -349,20 +312,15 @@ void printFileByEtlayer(FILE *iFile,FILE *oFile,FILE *arpFile,FILE *ip4File,FILE
 
         unsigned char ch[x],c;
 
-
-
-
         for(int i=0;i<x;i++)
             fread(&ch[i],1,1,iFile);
-
-
 
         int etx,ety,proto;
         etx=(int)ch[12];
         ety=(int)ch[13];
-
-
         string s=checkLinLayer(etx,ety);
+
+
         total++;
         if(s=="IPV4")
         {
@@ -370,52 +328,28 @@ void printFileByEtlayer(FILE *iFile,FILE *oFile,FILE *arpFile,FILE *ip4File,FILE
             printPcap(pH,ip4File,ch,x);
         }
 
-
-       else if(s=="IPV6")
-       {
+        else if(s=="IPV6")
+        {
         printf("\n\n%d\nIPV6 No:%d\n",total,ip6);
+        printPcap(pH,ip6File,ch,x);
+        }
 
-            printPcap(pH,ip6File,ch,x);
-       }
-
-       else if(s=="ARP")
-       {
-           
-
+        else if(s=="ARP")
+        {
             printf("\n\n%d\nARP No:%d\n",total,arp);
-
-            if((int)ch[19]==27)
-            {
-                cout<<"today is 27 may"<<endl;
-                cout<<endl;
-                ch[19]=(int)4;
-            }
-
             printPcap(pH,arpFile,ch,x);
-
         }
 
         else
         {
-            cout<<endl;
-            cout<<endl;
-            cout<<total<<endl;
-
-            cout<<endl;
-            cout<< "Other type No:"<<ot<<endl;
-            cout<<endl;
-
-           printPcap(pH,oFile,ch,x);
-
-
-       }
+            printf("\n\n%d\nOtherType No:%d\n",total,ot);
+            printPcap(pH,oFile,ch,x);
+        }
     }
 }
 
 
-
-
-int analysis(FILE *iFile)
+int main(FILE *iFile)
 {
     FILE *oFile,*arpFile,*ip4File,*ip6File,*tcpFile,*udpFile,*icmpFile,*igmpFile,*otFile;
 
@@ -424,4 +358,3 @@ int analysis(FILE *iFile)
 
     return 0;
 }
-
