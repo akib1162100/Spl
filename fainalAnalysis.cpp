@@ -324,13 +324,13 @@ void printFileByEtlayer(FILE *iFile,FILE *oFile,FILE *arpFile,FILE *ip4File,FILE
         total++;
         if(s=="IPV4")
         {
-            printf("\n\n%d\nIPV4 No:%d\n",total,ip4);
+            printf("\n\n%d\nIPV4 No:%d\n",total,ipv4);
             printPcap(pH,ip4File,ch,x);
         }
 
         else if(s=="IPV6")
         {
-        printf("\n\n%d\nIPV6 No:%d\n",total,ip6);
+        printf("\n\n%d\nIPV6 No:%d\n",total,ipv6);
         printPcap(pH,ip6File,ch,x);
         }
 
@@ -349,9 +349,9 @@ void printFileByEtlayer(FILE *iFile,FILE *oFile,FILE *arpFile,FILE *ip4File,FILE
 }
 
 
-int main(FILE *iFile)
+int main()
 {
-    FILE *oFile,*arpFile,*ip4File,*ip6File,*tcpFile,*udpFile,*icmpFile,*igmpFile,*otFile;
+    FILE *iFile,*oFile,*arpFile,*ip4File,*ip6File,*tcpFile,*udpFile,*icmpFile,*igmpFile,*otFile;
 
     printFileByEtlayer(iFile,oFile,arpFile,ip4File,ip6File);
    // printFileByTransProtocol(iFile,otFile,tcpFile,udpFile,icmpFile,igmpFile);
