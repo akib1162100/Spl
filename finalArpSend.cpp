@@ -8,12 +8,12 @@
 #include <linux/if_packet.h>
 #include <netinet/in.h>
 #include <net/if.h>
-#include <bits/ioctls.h>
 #include <net/ethernet.h>
 #include <netinet/ip.h>
-#include <errno.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <bits/ioctls.h>
+#include <errno.h>
 using namespace std;
 
 typedef struct _arp_hdr arp_hdr;
